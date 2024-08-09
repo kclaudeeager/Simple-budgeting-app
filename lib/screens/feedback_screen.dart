@@ -1,27 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:get/get.dart';
 
-class FeedbackScreen extends StatefulWidget {
-  const FeedbackScreen({super.key});
+import '../providers/feedback_controller.dart';
 
-  @override
-  _FeedbackScreenState createState() => _FeedbackScreenState();
-}
 
-class _FeedbackScreenState extends State<FeedbackScreen> {
+class FeedbackScreen extends StatelessWidget {
+  final FeedbackController feedbackController = Get.put(FeedbackController());
   final _formKey = GlobalKey<FormState>();
-  String _feedbackText = '';
-  double _rating = 0.0;
   final List<String> _elementsToImprovement = ['UI/UX', 'Performance', 'Features', 'Others'];
-  final List<String> _selectedImprovements = [];
 
-  void _submitFeedback() async {
+  FeedbackScreen({super.key});
+
+  void _submitFeedback(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState?.save();
 
-      debugPrint('Rating: $_rating');
-      debugPrint('Feedback: $_feedbackText');
-      debugPrint('Improvements: $_selectedImprovements');
+      debugPrint('Rating: ${feedbackController.rating.value}');
+      debugPrint('Feedback: ${feedbackController.feedbackText.value}');
+      debugPrint('Improvements: ${feedbackController.selectedImprovements}');
 
       // Here, you can either store the feedback locally or send it to a backend server
       await _storeFeedbackLocally();
@@ -31,12 +28,13 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
       // Display a success message or dialog
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Thank you for your feedback!'),
+          content: Text('Thank you for your feedback!', style: TextStyle(color: Colors.black)),
+            backgroundColor: Colors.greenAccent,
         ),
       );
-
       // Close the feedback screen
       Navigator.of(context).pop();
+      feedbackController.resetFeedback();
     }
   }
 
@@ -66,8 +64,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 children: [
                   const Text('Rate Your Experience:'),
                   const SizedBox(height: 8.0),
-                  RatingBar.builder(
-                    initialRating: _rating,
+                  Obx(() => RatingBar.builder(
+                    initialRating: feedbackController.rating.value,
                     minRating: 1,
                     direction: Axis.horizontal,
                     allowHalfRating: true,
@@ -78,34 +76,26 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       color: Colors.amber,
                     ),
                     onRatingUpdate: (rating) {
-                      setState(() {
-                        _rating = rating;
-                      });
+                      feedbackController.updateRating(rating);
                     },
-                  ),
+                  )),
                   const SizedBox(height: 16.0),
                   const Text("Tell us what you'd like to see improved:",
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8.0),
-                 Wrap(
-                spacing: 8.0,
-                children: _elementsToImprovement.map((element) {
-                  return ChoiceChip(
-                    label: Text(element),
-                    selected: _selectedImprovements.contains(element),
-                    onSelected: (selected) {
-                      setState(() {
-                        if (selected) {
-                          _selectedImprovements.add(element);
-                        } else {
-                          _selectedImprovements.remove(element);
-                        }
-                      });
-                    },
-                    selectedColor: Colors.blue,
-                  );
-                }).toList(),
-              ),
+                  Obx(() => Wrap(
+                    spacing: 8.0,
+                    children: _elementsToImprovement.map((element) {
+                      return ChoiceChip(
+                        label: Text(element),
+                        selected: feedbackController.selectedImprovements.contains(element),
+                        onSelected: (selected) {
+                          feedbackController.toggleImprovement(element);
+                        },
+                        selectedColor: Colors.blue,
+                      );
+                    }).toList(),
+                  )),
                   const SizedBox(height: 16.0),
                   TextFormField(
                     maxLines: 4,
@@ -114,18 +104,23 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Please enter your feedback';
+                      // Count the number of words to be not greater than 100
+                      if (value!.split(' ').length > 100) {
+                        return 'Feedback should not exceed 100 words';
                       }
+                      //
+                      // if (value.isEmpty) {
+                      //   return 'Please enter your feedback';
+                      // }
                       return null;
                     },
                     onSaved: (value) {
-                      _feedbackText = value!;
+                      feedbackController.updateFeedbackText(value!);
                     },
                   ),
                   const SizedBox(height: 16.0),
                   ElevatedButton(
-                    onPressed: _submitFeedback,
+                    onPressed: () => _submitFeedback(context),
                     child: const Text('Submit Feedback'),
                   ),
                 ],
