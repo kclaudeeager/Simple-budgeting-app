@@ -61,7 +61,10 @@ void _showRandomFeedback() {
   debugPrint('Feedback timer triggered');
   if (!_feedbackShown) {
     _feedbackShown = true;
-    Get.to(() =>  FeedbackScreen(), fullscreenDialog: true)!.then((_) {
+    Get.to(() =>  FeedbackScreen(onFeedbackSubmitted: (){
+      Navigator.of(context).pop();
+      _resetFeedbackTimer();
+    },), fullscreenDialog: true)!.then((_) {
       _resetFeedbackTimer();
     });
   }

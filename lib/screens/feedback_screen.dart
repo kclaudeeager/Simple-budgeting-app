@@ -8,9 +8,10 @@ import '../providers/feedback_controller.dart';
 class FeedbackScreen extends StatelessWidget {
   final FeedbackController feedbackController = Get.put(FeedbackController());
   final _formKey = GlobalKey<FormState>();
+  final VoidCallback onFeedbackSubmitted;
   final List<String> _elementsToImprovement = ['UI/UX', 'Performance', 'Features', 'Others'];
 
-  FeedbackScreen({super.key});
+  FeedbackScreen({super.key, required this.onFeedbackSubmitted});
 
   void _submitFeedback(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
@@ -24,16 +25,15 @@ class FeedbackScreen extends StatelessWidget {
       await _storeFeedbackLocally();
       // or
       // await _sendFeedbackToServer();
-
+      onFeedbackSubmitted();
       // Display a success message or dialog
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Thank you for your feedback!', style: TextStyle(color: Colors.black)),
-            backgroundColor: Colors.greenAccent,
-        ),
+      Get.snackbar(
+        'Thank you!',
+        'Your feedback has been submitted.',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.greenAccent,
+        colorText: Colors.black,
       );
-      // Close the feedback screen
-      Navigator.of(context).pop();
       feedbackController.resetFeedback();
     }
   }
