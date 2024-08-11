@@ -12,7 +12,9 @@ A simple budgeting app built with Flutter and GetX for state management and navi
 ![Screenshot_20240809_145849.png](assets/Screenshot_20240809_145849.png)
 ![Screenshot_20240809_145928.png](assets/Screenshot_20240809_145928.png)
 ![Screenshot_20240809_145946.png](assets/Screenshot_20240809_145946.png)
-[Screen_recording_budget.webm](assets/Screen_recording_budget.webm)
+![Screenshot_20240811_222021.png](assets/Screenshot_20240811_222021.png)
+![Screenshot_20240811_222101.png](assets/Screenshot_20240811_222101.png)
+![Screenshot_20240811_222116.png](assets/Screenshot_20240811_222116.png)
 
 ## Getting Started
 
