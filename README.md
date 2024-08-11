@@ -8,6 +8,11 @@ A simple budgeting app built with Flutter and GetX for state management and navi
 - Add and view transactions
 - Provide feedback with ratings and improvement suggestions
 
+## App Overview screenshots
+![Screenshot_20240809_145849.png](..%2F..%2FCMU%2FInternship%2Fdftr%2FScreenshot_20240809_145849.png)
+![Screenshot_20240809_145928.png](..%2F..%2FCMU%2FInternship%2Fdftr%2FScreenshot_20240809_145928.png)
+![Screenshot_20240809_145946.png](..%2F..%2FCMU%2FInternship%2Fdftr%2FScreenshot_20240809_145946.png)
+[Screen_recording_budget.webm](..%2F..%2FCMU%2FInternship%2Fdftr%2FScreen_recording_budget.webm)
 ## Getting Started
 
 ### Prerequisites

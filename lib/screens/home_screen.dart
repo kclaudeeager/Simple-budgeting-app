@@ -8,6 +8,7 @@ import '../widgets/face_emoji_feedback.dart';
 import '../widgets/full_width_alert_dialog.dart';
 import 'add_budget_screen.dart';
 import 'add_transaction_screen.dart';
+import 'budget_overview_screen.dart';
 import 'feedback_screen.dart';
 import 'dart:math';
 
@@ -137,6 +138,12 @@ void _showRandomFeedback() {
               ),
             ),
           ),
+          // display budget overview screen
+          FloatingActionButton(
+            heroTag: 'budgetOverview',
+            child: const Icon(Icons.pie_chart),
+            onPressed: () => Get.to(() => BudgetOverviewScreen()),
+            ),
         ],
       ),
     );
